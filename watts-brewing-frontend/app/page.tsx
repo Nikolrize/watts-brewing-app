@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -16,13 +16,14 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { DashboardData } from "@/lib/data";
 import { Label } from "@/components/ui/label";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { getDashboard } from "@/lib/api";
+import { DashboardDataType, EnergySources, EnergyTab } from "@/lib/types";
 
 function StatCard({ title, value, suffix }: any) {
   return (
@@ -78,10 +79,25 @@ function ContributionChart({ value }: any) {
 }
 
 export default function Dashboard() {
-  const [tab, setTab] = useState("kinetic");
-  const source =
-    DashboardData.sources[tab as keyof typeof DashboardData.sources];
-  const { kinetic, vibration, airflow } = DashboardData.sources;
+  const [tab, setTab] = useState<EnergyTab>("kinetic");
+  const [dashboardData, setDashboardData] = useState<DashboardDataType | null>(
+    null,
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getDashboard();
+      if (!data) return null;
+
+      setDashboardData(data);
+    };
+
+    fetchData();
+  }, []);
+  if (!dashboardData) return <p>Loading...</p>;
+
+  const source = dashboardData?.sources[tab as keyof EnergySources];
+  const { kinetic, vibration, airflow } = dashboardData?.sources;
 
   return (
     <div className="p-6 flex flex-col gap-4 overflow-y-auto">
@@ -91,7 +107,7 @@ export default function Dashboard() {
           <CarouselItem className="basis-1/5">
             <StatCard
               title="Total Energy"
-              value={DashboardData.summary.totalEnergyGenerated_kWh}
+              value={dashboardData?.summary.totalEnergyGenerated_kWh}
               suffix="kWh"
             />
           </CarouselItem>
@@ -99,7 +115,7 @@ export default function Dashboard() {
           <CarouselItem className="basis-1/5">
             <StatCard
               title="Live Rate"
-              value={DashboardData.summary.realTimeGenerationRate_kWh_per_min}
+              value={dashboardData?.summary.realTimeGenerationRate_kWh_per_min}
               suffix="kWh/min"
             />
           </CarouselItem>
@@ -107,14 +123,14 @@ export default function Dashboard() {
           <CarouselItem className="basis-1/5">
             <StatCard
               title="Peak Time"
-              value={DashboardData.summary.peakGenerationTime}
+              value={dashboardData?.summary.peakGenerationTime}
             />
           </CarouselItem>
 
           <CarouselItem className="basis-1/5">
             <StatCard
               title="Efficiency"
-              value={DashboardData.summary.systemEfficiency_percent}
+              value={dashboardData?.summary.systemEfficiency_percent}
               suffix="%"
             />
           </CarouselItem>
@@ -122,7 +138,7 @@ export default function Dashboard() {
           <CarouselItem className="basis-1/5">
             <StatCard
               title="Devices"
-              value={DashboardData.summary.totalConnectedDevices}
+              value={dashboardData?.summary.totalConnectedDevices}
             />
           </CarouselItem>
 
@@ -133,10 +149,10 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <Progress
-                  value={DashboardData.summary.energyStorageLevel_percent}
+                  value={dashboardData?.summary.energyStorageLevel_percent}
                 />
                 <p className="text-sm mt-2">
-                  {DashboardData.summary.energyStorageLevel_percent}%
+                  {dashboardData?.summary.energyStorageLevel_percent}%
                 </p>
               </CardContent>
             </Card>
@@ -151,11 +167,11 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <p className="text-lg font-bold">
-                  {DashboardData.topPerformingStation.name}
+                  {dashboardData?.topPerformingStation.name}
                 </p>
 
                 <p className="text-sm text-muted-foreground">
-                  {DashboardData.topPerformingStation.energyGenerated_kWh} kWh
+                  {dashboardData?.topPerformingStation.energyGenerated_kWh} kWh
                   generated
                 </p>
               </CardContent>
@@ -165,7 +181,11 @@ export default function Dashboard() {
       </Carousel>
 
       {/* TABS */}
-      <Tabs defaultValue="kinetic" onValueChange={setTab} className="flex flex-col gap-4">
+      <Tabs
+        defaultValue="kinetic"
+        onValueChange={(value) => setTab(value as EnergyTab)}
+        className="flex flex-col gap-4"
+      >
         <TabsList>
           <TabsTrigger value="kinetic">Kinetic</TabsTrigger>
           <TabsTrigger value="vibration">Vibration</TabsTrigger>
@@ -232,7 +252,7 @@ export default function Dashboard() {
             <CardContent className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <Label className="text-muted-foreground">Next Peak:</Label>
-                <p>{DashboardData.aiInsights.prediction.nextPeakTime}</p>
+                <p>{dashboardData?.aiInsights.prediction.nextPeakTime}</p>
               </div>
 
               <div className="flex gap-2">
@@ -240,7 +260,7 @@ export default function Dashboard() {
                   Expected Energy:
                 </Label>
                 <p>
-                  {DashboardData.aiInsights.prediction.expectedEnergy_kWh} kWh
+                  {dashboardData?.aiInsights.prediction.expectedEnergy_kWh} kWh
                 </p>
               </div>
 
@@ -249,7 +269,7 @@ export default function Dashboard() {
                   Recommendations:
                 </Label>
                 <div className="flex gap-2">
-                  {DashboardData.aiInsights.recommendations.map((rec, i) => (
+                  {dashboardData?.aiInsights.recommendations.map((rec, i) => (
                     <Badge key={i} variant="secondary">
                       {rec}
                     </Badge>
@@ -265,7 +285,7 @@ export default function Dashboard() {
               <CardTitle className="text-brand">Station Performance</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {DashboardData.stations.map((station) => (
+              {dashboardData?.stations.map((station) => (
                 <div
                   key={station.name}
                   className="flex items-center justify-between border-b pb-2"
