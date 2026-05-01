@@ -35,7 +35,7 @@ import { Separator } from "../ui/separator";
 export default function CustomSidebar() {
   return (
     <Sidebar>
-      <SidebarHeader className="flex flex-row justify-center items-center text-xl font-bold p-4 text-brand gap-2">
+      <SidebarHeader className="flex flex-row items-center text-xl font-bold p-4 text-brand gap-2">
         <Button size={"icon-lg"}>
           <Coffee />
         </Button>
