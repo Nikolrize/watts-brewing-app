@@ -172,7 +172,7 @@ export default function Dashboard() {
           <TabsTrigger value="airflow">Airflow</TabsTrigger>
         </TabsList>
 
-        <TabsContent value={tab} className="flex flex-col gap-6">
+        <TabsContent value={tab} className="flex flex-col gap-4">
           {/* SOURCE STATS */}
           <div className="grid grid-cols-3 gap-4">
             <StatCard title="Energy" value={source.total_kWh} suffix="kWh" />
