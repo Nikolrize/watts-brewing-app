@@ -1,4 +1,4 @@
-export const DashboardData = {
+const DashboardData = {
   summary: {
     totalEnergyGenerated_kWh: 1245.6,
     realTimeGenerationRate_kWh_per_min: 2.4,
@@ -139,3 +139,5 @@ export const DashboardData = {
     },
   ],
 };
+
+module.exports = DashboardData;
