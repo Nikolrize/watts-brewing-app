@@ -47,12 +47,18 @@ export type EnergySources = {
 };
 
 export type Station = {
-  name: string;
-  total_kWh: number;
-  kinetic: number;
-  vibration: number;
-  airflow: number;
-  rank: number;
+  success: boolean;
+  count: number;
+  data: [
+    {
+      name: string;
+      total_kWh: number;
+      kinetic: number;
+      vibration: number;
+      airflow: number;
+      rank: number;
+    },
+  ];
 };
 
 export type TopPerformingStation = {
@@ -86,8 +92,6 @@ export type DashboardDataType = {
   sources: EnergySources;
 
   energyTrend_total: TotalEnergyTrendPoint[];
-
-  stations: Station[];
 
   topPerformingStation: TopPerformingStation;
 

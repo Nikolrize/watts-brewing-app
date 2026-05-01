@@ -22,8 +22,8 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { getDashboard } from "@/lib/api";
-import { DashboardDataType, EnergySources, EnergyTab } from "@/lib/types";
+import { getDashboard, getStationRanking } from "@/lib/api";
+import { DashboardDataType, EnergySources, EnergyTab, Station } from "@/lib/types";
 
 function StatCard({ title, value, suffix }: any) {
   return (
@@ -83,6 +83,9 @@ export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardDataType | null>(
     null,
   );
+  const [stationRanking, setStationRanking] = useState<Station | null>(
+    null,
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,7 +97,19 @@ export default function Dashboard() {
 
     fetchData();
   }, []);
-  if (!dashboardData) return <p>Loading...</p>;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getStationRanking();
+      if (!data) return null;
+
+      setStationRanking(data);
+    };
+
+    fetchData();
+  }, []);
+
+  if (!dashboardData || !stationRanking) return <p>Loading...</p>;
 
   const source = dashboardData?.sources[tab as keyof EnergySources];
   const { kinetic, vibration, airflow } = dashboardData?.sources;
@@ -285,7 +300,7 @@ export default function Dashboard() {
               <CardTitle className="text-brand">Station Performance</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {dashboardData?.stations.map((station) => (
+              {stationRanking?.data.map((station) => (
                 <div
                   key={station.name}
                   className="flex items-center justify-between border-b pb-2"
