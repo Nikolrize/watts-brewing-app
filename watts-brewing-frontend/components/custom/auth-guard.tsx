@@ -4,7 +4,7 @@ import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/lib/api";
 
-export default function DashboardGuard({ children }: { children: ReactNode }) {
+export default function AuthGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
