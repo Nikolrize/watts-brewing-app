@@ -61,11 +61,6 @@ export type Station = {
   ];
 };
 
-export type TopPerformingStation = {
-  name: string;
-  energyGenerated_kWh: number;
-};
-
 export type AIInsights = {
   success: string;
   data: {
@@ -98,8 +93,6 @@ export type DashboardDataType = {
   sources: EnergySources;
 
   energyTrend_total: TotalEnergyTrendPoint[];
-
-  topPerformingStation: TopPerformingStation;
 
   alerts: Alert[];
 };
