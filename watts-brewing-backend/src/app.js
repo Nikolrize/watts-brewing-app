@@ -29,6 +29,13 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    time: new Date().toISOString(),
+  });
+});
+
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/stations", stationRoutes);
 app.use("/api/ai", aiRoutes);
