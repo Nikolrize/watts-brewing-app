@@ -3,7 +3,8 @@ const cors = require("cors");
 
 const app = express();
 const dashboardRoutes = require("./routes/dashboardRoutes");
-const stationRoutes = require("./routes/stationRoutes")
+const stationRoutes = require("./routes/stationRoutes");
+const aiRoutes = require("./routes/aiRoutes");
 
 app.use(
   cors({
@@ -14,6 +15,7 @@ app.use(
 app.use(express.json());
 
 app.use("/api/dashboard", dashboardRoutes);
-app.use("/api/stations", stationRoutes)
+app.use("/api/stations", stationRoutes);
+app.use("/api/ai", aiRoutes);
 
 module.exports = app;
