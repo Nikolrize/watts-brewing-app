@@ -1,12 +1,21 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import CustomSidebar from "@/components/custom/custom-sidebar";
 import CustomHeaderWrapper from "@/components/custom/custom-header-wrapper";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
-export default function MainLayout({
+export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
+  if (!token) {
+    redirect("/login");
+  }
+
   return (
     <SidebarProvider>
       <CustomSidebar />

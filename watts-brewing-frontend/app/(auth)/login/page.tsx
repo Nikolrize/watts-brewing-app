@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { login } from "@/lib/api";
 import { loginCredential } from "@/lib/types";
-import Cookies from "js-cookie";
 import { Badge } from "@/components/ui/badge";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -39,11 +38,6 @@ export default function LoginPage() {
       if (!data || !data.success) {
         throw new Error(data?.message || "Login failed");
       }
-
-      Cookies.set("token", data.data.token, {
-        expires: 7,
-        secure: true,
-      });
 
       router.push("/dashboard");
     } catch (err: any) {
