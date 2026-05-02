@@ -45,14 +45,14 @@ export async function getUser() {
 }
 
 export async function logoutUser() {
-  try {
-    await fetch(`${BASE_URL}/api/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-    });
+  const res = await fetch(`${BASE_URL}/api/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
 
-    redirect("/login");
-  } catch (err) {
-    console.log("Logout failed");
+  if (!res.ok) {
+    throw new Error("Failed to logout user");
   }
+
+  return res.json();
 }

@@ -21,8 +21,9 @@ import {
   CommandSeparator,
 } from "../ui/command";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { logoutUser } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 export default function CustomHeader() {
   return (
@@ -41,6 +42,18 @@ export default function CustomHeader() {
 
 export function SearchCommandDialog() {
   const [open, setOpen] = useState<boolean>(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+
+      router.push("/login");
+      router.refresh();
+    } catch (err) {
+      console.log("Logout failed");
+    }
+  };
 
   return (
     <div>
@@ -84,7 +97,7 @@ export function SearchCommandDialog() {
                 <Button
                   variant={"ghost"}
                   size={"xs"}
-                  onClick={() => logoutUser()}
+                  onClick={handleLogout}
                   className="p-0 gap-2 text-sm w-full justify-start"
                 >
                   <LogOut />
