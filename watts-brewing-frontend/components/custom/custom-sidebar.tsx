@@ -31,10 +31,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getUser } from "@/lib/api";
+import { getUser, logoutUser } from "@/lib/api";
 import { loginCredential } from "@/lib/types";
 
 export default function CustomSidebar() {
@@ -73,13 +71,6 @@ export default function CustomSidebar() {
 
 export function ProfilePopover() {
   const [user, setUser] = useState<loginCredential | null>(null);
-
-  const router = useRouter();
-
-  const handleLogout = () => {
-    Cookies.remove("token");
-    router.push("/login");
-  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -130,7 +121,7 @@ export function ProfilePopover() {
         <Separator />
         <Button
           variant={"ghost"}
-          onClick={handleLogout}
+          onClick={() => logoutUser()}
           className="flex gap-2 justify-start w-full"
         >
           <LogOut className="text-muted-foreground" /> Log out

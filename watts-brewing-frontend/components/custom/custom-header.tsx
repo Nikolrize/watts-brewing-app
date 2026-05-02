@@ -22,8 +22,7 @@ import {
 } from "../ui/command";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import { logoutUser } from "@/lib/api";
 
 export default function CustomHeader() {
   return (
@@ -42,13 +41,6 @@ export default function CustomHeader() {
 
 export function SearchCommandDialog() {
   const [open, setOpen] = useState<boolean>(false);
-
-  const router = useRouter();
-
-  const handleLogout = () => {
-    Cookies.remove("token");
-    router.push("/login");
-  };
 
   return (
     <div>
@@ -92,7 +84,7 @@ export function SearchCommandDialog() {
                 <Button
                   variant={"ghost"}
                   size={"xs"}
-                  onClick={handleLogout}
+                  onClick={() => logoutUser()}
                   className="p-0 gap-2 text-sm w-full justify-start"
                 >
                   <LogOut />

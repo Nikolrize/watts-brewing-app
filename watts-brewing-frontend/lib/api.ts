@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { loginCredential } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -41,4 +42,17 @@ export async function getUser() {
   }
 
   return res.json();
+}
+
+export async function logoutUser() {
+  try {
+    await fetch(`${BASE_URL}/api/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    redirect("/login");
+  } catch (err) {
+    console.log("Logout failed");
+  }
 }

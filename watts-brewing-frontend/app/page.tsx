@@ -2,20 +2,28 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import { Spinner } from "@/components/ui/spinner";
+import { getUser } from "@/lib/api";
 
 export default function Main() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = Cookies.get("token");
+    const checkAuth = async () => {
+      try {
+        const res = await getUser();
 
-    if (token) {
-      router.replace("/dashboard");
-    } else {
-      router.replace("/login");
-    }
+        if (res?.success) {
+          router.replace("/dashboard");
+        } else {
+          router.replace("/login");
+        }
+      } catch (err) {
+        router.replace("/login");
+      }
+    };
+
+    checkAuth();
   }, []);
 
   return (
