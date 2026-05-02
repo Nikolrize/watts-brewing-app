@@ -98,3 +98,8 @@ export type DashboardDataType = {
 };
 
 export type EnergyTab = "kinetic" | "vibration" | "airflow";
+
+export type loginCredential = {
+  username: string;
+  password: string;
+}

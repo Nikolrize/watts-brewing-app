@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import CustomSidebar from "@/components/custom/custom-sidebar";
-import CustomHeaderWrapper from "@/components/custom/custom-header-wrapper";
 
 const InterSans = Inter({
   variable: "--font-sans",
@@ -22,15 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${InterSans.variable} h-full antialiased dark`}>
-      <body>
-        <SidebarProvider>
-          <CustomSidebar />
-          <div className="flex flex-col h-screen w-full overflow-hidden">
-            <CustomHeaderWrapper />
-            <main className="flex-1 overflow-y-auto">{children}</main>
-          </div>
-        </SidebarProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

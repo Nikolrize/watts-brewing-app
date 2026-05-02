@@ -31,6 +31,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export default function CustomSidebar() {
   return (
@@ -67,6 +69,13 @@ export default function CustomSidebar() {
 }
 
 export function ProfilePopover() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    router.push("/login");
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -106,7 +115,11 @@ export function ProfilePopover() {
         </Link>
 
         <Separator />
-        <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
+        <Button
+          variant={"ghost"}
+          onClick={handleLogout}
+          className="flex gap-2 justify-start w-full"
+        >
           <LogOut className="text-muted-foreground" /> Log out
         </Button>
       </PopoverContent>
