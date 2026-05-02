@@ -1,8 +1,11 @@
 require("dotenv").config();
 const app = require("./app");
-const connectDB = require("./config/db"); // 👈 add this
+const connectDB = require("./config/db");
+const seedAdmin = require("./utils/seedAdmin");
 
-connectDB();
+connectDB().then(() => {
+  seedAdmin();
+});
 
 const PORT = 5000;
 
