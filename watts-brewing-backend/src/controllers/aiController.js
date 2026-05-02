@@ -4,19 +4,43 @@ require("dotenv").config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
+let cachedAIResponse = null;
+let lastFetchTime = 0;
+const CACHE_DURATION = 60 * 1000; // 1 minute
+
 const getAIInsights = async (req, res) => {
   try {
+    const now = Date.now();
+
+    if (cachedAIResponse && now - lastFetchTime < CACHE_DURATION) {
+      return res.json({
+        success: true,
+        data: cachedAIResponse,
+        cached: true,
+      });
+    }
+
     const totalEnergy = stations.reduce((sum, s) => sum + s.total_kWh, 0);
+    const simplifiedStations = stations.map((s) => ({
+      name: s.name,
+      total_kWh: s.total_kWh,
+      kinetic: s.kinetic,
+      vibration: s.vibration,
+      airflow: s.airflow,
+    }));
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.1-flash-lite-preview",
     });
 
     const prompt = `
     You are an AI energy analytics system for an MRT energy harvesting platform.
 
     Analyze this data:
-    ${JSON.stringify({ stations, totalEnergy })}
+    ${JSON.stringify({
+      stations: simplifiedStations,
+      totalEnergy,
+    })}
 
     Return ONLY valid JSON:
     {
@@ -31,9 +55,11 @@ const getAIInsights = async (req, res) => {
     }
 
     Rules:
+    - nextPeakTime should be like 19:00-22:30
     - systemHealthScore must be 0-100
     - insights must be short and technical
     - recommendations must be actionable
+    - do not include fullstop at the end of sentence
     `;
 
     const result = await model.generateContent(prompt);
@@ -44,6 +70,9 @@ const getAIInsights = async (req, res) => {
     const jsonEnd = text.lastIndexOf("}");
 
     const parsed = JSON.parse(text.slice(jsonStart, jsonEnd + 1));
+
+    cachedAIResponse = parsed;
+    lastFetchTime = now;
 
     res.json({
       success: true,
