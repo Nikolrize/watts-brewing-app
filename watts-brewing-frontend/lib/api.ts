@@ -27,3 +27,16 @@ export async function login(form: loginCredential) {
 
   return res.json();
 }
+
+export async function getUser() {
+  const res = await fetch(`http://localhost:5000/api/user/me`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch user");
+  }
+
+  return res.json();
+}

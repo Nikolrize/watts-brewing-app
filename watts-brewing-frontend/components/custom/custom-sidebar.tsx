@@ -33,6 +33,9 @@ import Link from "next/link";
 import { Separator } from "../ui/separator";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getUser } from "@/lib/api";
+import { loginCredential } from "@/lib/types";
 
 export default function CustomSidebar() {
   return (
@@ -69,12 +72,29 @@ export default function CustomSidebar() {
 }
 
 export function ProfilePopover() {
+  const [user, setUser] = useState<loginCredential | null>(null);
+
   const router = useRouter();
 
   const handleLogout = () => {
     Cookies.remove("token");
     router.push("/login");
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const data = await getUser();
+        if (!data) return null;
+        
+        setUser(data.data);
+      } catch (err) {
+        console.log("Not logged in");
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <Popover>
@@ -87,9 +107,8 @@ export function ProfilePopover() {
             <Avatar>
               <AvatarImage src={"/icons/user.png"} alt="user-png" />
               <AvatarFallback>CN</AvatarFallback>
-              {/* <AvatarBadge className={user?.status === "online" ? "bg-green-600" : "bg-red-600"} /> */}
             </Avatar>
-            Admin
+            {user?.username}
           </div>
           <EllipsisVertical />
         </SidebarMenuButton>
@@ -102,17 +121,11 @@ export function ProfilePopover() {
           </PopoverTitle>
         </PopoverHeader>
 
-        <Link href={"/"}>
+        {/* <Link href={"/"}>
           <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
             <CircleUser className="text-muted-foreground" /> Account
           </Button>
-        </Link>
-
-        <Link href={"/"}>
-          <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
-            <Settings className="text-muted-foreground" /> Settings
-          </Button>
-        </Link>
+        </Link> */}
 
         <Separator />
         <Button
