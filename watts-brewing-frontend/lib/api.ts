@@ -7,3 +7,8 @@ export async function getStationRanking() {
   const res = await fetch("http://localhost:5000/api/stations");
   return res.json();
 }
+
+export async function getAIInsights() {
+  const res = await fetch("http://localhost:5000/api/ai");
+  return res.json();
+}
