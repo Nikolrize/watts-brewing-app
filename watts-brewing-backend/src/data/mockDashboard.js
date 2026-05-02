@@ -75,34 +75,6 @@ const DashboardData = {
     { time: "18:00", value_kWh: 250 },
     { time: "20:00", value_kWh: 165 },
   ],
-
-  topPerformingStation: {
-    name: "KL Sentral",
-    energyGenerated_kWh: 210,
-  },
-
-  aiInsights: {
-    prediction: {
-      nextPeakTime: "18:00 - 20:00",
-      expectedEnergy_kWh: 1320,
-    },
-    recommendations: [
-      "Increase vibration sensors in Tunnel B to improve output",
-      "Optimize airflow turbine placement near high-speed zones",
-      "Energy storage nearing capacity during peak hours",
-    ],
-  },
-
-  alerts: [
-    {
-      type: "info",
-      message: "System operating normally",
-    },
-    {
-      type: "warning",
-      message: "Airflow turbine efficiency slightly reduced at Tunnel A",
-    },
-  ],
 };
 
 module.exports = DashboardData;
