@@ -34,6 +34,7 @@ import { Separator } from "../ui/separator";
 import { useEffect, useState } from "react";
 import { getUser, logoutUser } from "@/lib/api";
 import { loginCredential } from "@/lib/types";
+import { useRouter } from "next/navigation";
 
 export default function CustomSidebar() {
   return (
@@ -71,13 +72,14 @@ export default function CustomSidebar() {
 
 export function ProfilePopover() {
   const [user, setUser] = useState<loginCredential | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const data = await getUser();
         if (!data) return null;
-        
+
         setUser(data.data);
       } catch (err) {
         console.log("Not logged in");
@@ -86,6 +88,17 @@ export function ProfilePopover() {
 
     fetchUser();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+
+      router.push("/login");
+      router.refresh();
+    } catch (err) {
+      console.log("Logout failed");
+    }
+  };
 
   return (
     <Popover>
@@ -121,7 +134,7 @@ export function ProfilePopover() {
         <Separator />
         <Button
           variant={"ghost"}
-          onClick={() => logoutUser()}
+          onClick={handleLogout}
           className="flex gap-2 justify-start w-full"
         >
           <LogOut className="text-muted-foreground" /> Log out

@@ -9,8 +9,7 @@ export default async function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
+  const token = (await cookies()).get("token")?.value;
 
   if (!token) {
     redirect("/login");
