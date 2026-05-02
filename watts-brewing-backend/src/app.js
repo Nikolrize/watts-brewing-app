@@ -9,21 +9,18 @@ const aiRoutes = require("./routes/aiRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 
-const allowedOrigins = new Set([
-  "http://localhost:3000",
-  process.env.FRONTEND_URL,
-]);
+const allowedOrigins = ["http://localhost:3000", process.env.FRONTEND_URL];
 
 app.use(
   cors({
-    origin: (origin, callback) => {
+    origin: function (origin, callback) {
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.has(origin)) {
+      if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
         return callback(null, true);
       }
 
-      return callback(new Error("Not allowed by CORS"));
+      return callback(new Error("Not allowed by CORS: " + origin));
     },
     credentials: true,
   }),
