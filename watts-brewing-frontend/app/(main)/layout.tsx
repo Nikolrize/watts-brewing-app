@@ -1,7 +1,7 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import CustomSidebar from "@/components/custom/custom-sidebar";
 import CustomHeaderWrapper from "@/components/custom/custom-header-wrapper";
-import DashboardGuard from "@/components/custom/dashboard-guard";
+import AuthGuard from "@/components/custom/auth-guard";
 
 export default async function MainLayout({
   children,
@@ -9,7 +9,7 @@ export default async function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <DashboardGuard>
+    <AuthGuard>
       <SidebarProvider>
         <CustomSidebar />
         <div className="flex flex-col h-screen w-full overflow-hidden">
@@ -17,6 +17,6 @@ export default async function MainLayout({
           <main className="flex-1 overflow-y-auto">{children}</main>
         </div>
       </SidebarProvider>
-    </DashboardGuard>
+    </AuthGuard>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import AuthGuard from "@/components/custom/auth-guard";
 
 const InterSans = Inter({
   variable: "--font-sans",
@@ -19,7 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${InterSans.variable} h-full antialiased dark`}>
-      <body>{children}</body>
+      <body>
+        <AuthGuard>{children}</AuthGuard>
+      </body>
     </html>
   );
 }
