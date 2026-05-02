@@ -48,12 +48,18 @@ const loginUser = async (req, res) => {
       expiresIn: "7d",
     });
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     res.json({
       success: true,
       data: {
         id: user._id,
         username: user.username,
-        token,
       },
     });
   } catch (err) {
@@ -61,4 +67,14 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+const logoutUser = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+
+  res.json({ success: true, message: "Logged out" });
+};
+
+module.exports = { registerUser, loginUser, logoutUser };
