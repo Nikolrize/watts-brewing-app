@@ -72,6 +72,7 @@ const logoutUser = (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
+    path: "/",
   });
 
   res.json({ success: true, message: "Logged out" });
