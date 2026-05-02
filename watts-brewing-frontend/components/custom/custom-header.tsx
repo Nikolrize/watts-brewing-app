@@ -1,6 +1,12 @@
 "uce client";
 
-import { LayoutDashboard, Search, Settings, UserCircle } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogOut,
+  Search,
+  Settings,
+  UserCircle,
+} from "lucide-react";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { SidebarTrigger } from "../ui/sidebar";
@@ -16,6 +22,8 @@ import {
 } from "../ui/command";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function CustomHeader() {
   return (
@@ -35,6 +43,13 @@ export default function CustomHeader() {
 export function SearchCommandDialog() {
   const [open, setOpen] = useState<boolean>(false);
 
+  const router = useRouter();
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    router.push("/login");
+  };
+
   return (
     <div>
       <Button
@@ -50,7 +65,7 @@ export function SearchCommandDialog() {
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup heading="Navigation">
-              <Link href="/">
+              <Link href="/dashboard">
                 <CommandItem>
                   <LayoutDashboard />
                   <span>Dashboard</span>
@@ -61,7 +76,7 @@ export function SearchCommandDialog() {
             <CommandSeparator />
 
             <CommandGroup heading="Profile">
-              <Link href="/">
+              {/* <Link href="/">
                 <CommandItem>
                   <UserCircle />
                   <span>Account</span>
@@ -72,7 +87,18 @@ export function SearchCommandDialog() {
                   <Settings />
                   <span>Settings</span>
                 </CommandItem>
-              </Link>
+              </Link> */}
+              <CommandItem>
+                <Button
+                  variant={"ghost"}
+                  size={"xs"}
+                  onClick={handleLogout}
+                  className="p-0 gap-2 text-sm w-full justify-start"
+                >
+                  <LogOut />
+                  <span>Log out</span>
+                </Button>
+              </CommandItem>
             </CommandGroup>
           </CommandList>
         </Command>
