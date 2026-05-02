@@ -35,15 +35,39 @@ Backend:
 Other:
 - REST API architecture
 - In-memory caching for AI optimization
+- MongoDB database
 
-# Temporary Local URL
+# Deployed Live URL
+
+Frontend: https://watts-brewing-app.vercel.app/
+
+Backend: https://watts-brewing-app.onrender.com/
+
+Demo Login Credential:
+- Username: admin
+- Password: admin123
+
+# Local Development
+
+Frontend: http://localhost:3000
 
 Backend: http://localhost:5000
 
-Frontend: http://localhost:3000
+# Environment Variables
+
+This is for better understanding of the structure, the actual keys are not shown below.
+
+Backend (.env):
+- GEMINI_API_KEY=your_api_key_here
+- MONGO_URI=mongodb_uri
+- JWT_SECRET=jwt_secret_key
+- FRONTEND_URL="https://watts-brewing-app.vercel.app"
+
+Frontend (.env):
+- NEXT_PUBLIC_BACKEND_URL="https://watts-brewing-app.onrender.com"
 
 # Author
 
 Built by: Chen Chor Yan (Team Teapot)
 
-For: UM Technothon
+For: UM Technothon 2026
