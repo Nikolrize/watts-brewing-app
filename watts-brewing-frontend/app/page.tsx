@@ -22,8 +22,14 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { getDashboard, getStationRanking } from "@/lib/api";
-import { DashboardDataType, EnergySources, EnergyTab, Station } from "@/lib/types";
+import { getAIInsights, getDashboard, getStationRanking } from "@/lib/api";
+import {
+  AIInsights,
+  DashboardDataType,
+  EnergySources,
+  EnergyTab,
+  Station,
+} from "@/lib/types";
 
 function StatCard({ title, value, suffix }: any) {
   return (
@@ -83,9 +89,8 @@ export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardDataType | null>(
     null,
   );
-  const [stationRanking, setStationRanking] = useState<Station | null>(
-    null,
-  );
+  const [stationRanking, setStationRanking] = useState<Station | null>(null);
+  const [aiData, setAIData] = useState<AIInsights | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -109,7 +114,20 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  if (!dashboardData || !stationRanking) return <p>Loading...</p>;
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getAIInsights();
+      if (!data) return null;
+
+      setAIData(data);
+    };
+
+    fetchData();
+  }, []);
+
+  if (!dashboardData) return <p>Loading Dashboard Data...</p>;
+  if (!stationRanking) return <p>Loading Station Ranking...</p>;
+  if (!aiData) return <p>Loading AI Insights...</p>;
 
   const source = dashboardData?.sources[tab as keyof EnergySources];
   const { kinetic, vibration, airflow } = dashboardData?.sources;
@@ -264,33 +282,60 @@ export default function Dashboard() {
             <CardHeader>
               <CardTitle className="text-brand">AI Insights</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col gap-2">
+            <CardContent className="flex flex-col gap-4">
               <div className="flex gap-2">
                 <Label className="text-muted-foreground">Next Peak:</Label>
-                <p>{dashboardData?.aiInsights.prediction.nextPeakTime}</p>
+                <p>{aiData.data.prediction.nextPeakTime}</p>
               </div>
 
               <div className="flex gap-2">
                 <Label className="text-muted-foreground">
                   Expected Energy:
                 </Label>
-                <p>
-                  {dashboardData?.aiInsights.prediction.expectedEnergy_kWh} kWh
-                </p>
+                <p>{aiData.data.prediction.expectedEnergy_kWh} kWh</p>
+              </div>
+
+              <div className="flex gap-2">
+                <Label className="text-muted-foreground">System Health:</Label>
+                <p className="font-bold">{aiData.data.systemHealthScore}%</p>
               </div>
 
               <div className="flex flex-col gap-2">
-                <Label className="text-muted-foreground">
-                  Recommendations:
-                </Label>
-                <div className="flex gap-2">
-                  {dashboardData?.aiInsights.recommendations.map((rec, i) => (
+                <Label className="text-muted-foreground">Insights:</Label>
+                <div className="flex gap-2 flex-wrap">
+                  {aiData.data.insights?.map((rec, i) => (
                     <Badge key={i} variant="secondary">
                       {rec}
                     </Badge>
                   ))}
                 </div>
               </div>
+
+              <div className="flex flex-col gap-2">
+                <Label className="text-muted-foreground">
+                  Recommendations:
+                </Label>
+                <div className="flex gap-2 flex-wrap">
+                  {aiData.data.recommendations?.map((rec, i) => (
+                    <Badge key={i} variant="secondary">
+                      {rec}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              {aiData.data.anomalies?.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  <Label className="text-muted-foreground">Anomalies:</Label>
+                  <div className="flex gap-2 flex-wrap">
+                    {aiData.data.anomalies.map((a: string, idx: number) => (
+                      <Badge key={idx} variant="destructive">
+                        {a}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 

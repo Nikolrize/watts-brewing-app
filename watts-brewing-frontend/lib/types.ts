@@ -67,11 +67,17 @@ export type TopPerformingStation = {
 };
 
 export type AIInsights = {
-  prediction: {
-    nextPeakTime: string;
-    expectedEnergy_kWh: number;
+  success: string;
+  data: {
+    prediction: {
+      nextPeakTime: string;
+      expectedEnergy_kWh: number;
+    };
+    recommendations: string[];
+    systemHealthScore: number;
+    insights: string[];
+    anomalies: string[];
   };
-  recommendations: string[];
 };
 
 export type Alert = {
@@ -94,8 +100,6 @@ export type DashboardDataType = {
   energyTrend_total: TotalEnergyTrendPoint[];
 
   topPerformingStation: TopPerformingStation;
-
-  aiInsights: AIInsights;
 
   alerts: Alert[];
 };
