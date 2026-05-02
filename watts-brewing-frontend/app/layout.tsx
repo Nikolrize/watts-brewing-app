@@ -25,10 +25,9 @@ export default function RootLayout({
       <body>
         <SidebarProvider>
           <CustomSidebar />
-          <div className="flex flex-col h-screen w-full">
-            <CustomHeaderWrapper>
-              <main>{children}</main>
-            </CustomHeaderWrapper>
+          <div className="flex flex-col h-screen w-full overflow-hidden">
+            <CustomHeaderWrapper />
+            <main className="flex-1 overflow-y-auto">{children}</main>
           </div>
         </SidebarProvider>
       </body>

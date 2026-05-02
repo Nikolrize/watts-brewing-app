@@ -133,7 +133,7 @@ export default function Dashboard() {
   const { kinetic, vibration, airflow } = dashboardData?.sources;
 
   return (
-    <div className="p-6 flex flex-col gap-4 overflow-y-auto">
+    <div className="p-6 flex flex-col gap-4">
       {/* TOP OVERVIEW */}
       <Carousel className="w-full">
         <CarouselContent>
