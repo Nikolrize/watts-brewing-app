@@ -137,7 +137,7 @@ export default function Dashboard() {
       {/* TOP OVERVIEW */}
       <Carousel className="w-full">
         <CarouselContent>
-          <CarouselItem className="basis-1/5">
+          <CarouselItem className="basis-1/2 sm:basis-1/5">
             <StatCard
               title="Total Energy"
               value={dashboardData?.summary.totalEnergyGenerated_kWh}
@@ -145,7 +145,7 @@ export default function Dashboard() {
             />
           </CarouselItem>
 
-          <CarouselItem className="basis-1/5">
+          <CarouselItem className="basis-1/2 sm:basis-1/5">
             <StatCard
               title="Live Rate"
               value={dashboardData?.summary.realTimeGenerationRate_kWh_per_min}
@@ -153,14 +153,14 @@ export default function Dashboard() {
             />
           </CarouselItem>
 
-          <CarouselItem className="basis-1/5">
+          <CarouselItem className="basis-1/2 sm:basis-1/5">
             <StatCard
               title="Peak Time"
               value={dashboardData?.summary.peakGenerationTime}
             />
           </CarouselItem>
 
-          <CarouselItem className="basis-1/5">
+          <CarouselItem className="basis-1/2 sm:basis-1/5">
             <StatCard
               title="Efficiency"
               value={dashboardData?.summary.systemEfficiency_percent}
@@ -168,14 +168,14 @@ export default function Dashboard() {
             />
           </CarouselItem>
 
-          <CarouselItem className="basis-1/5">
+          <CarouselItem className="basis-1/2 sm:basis-1/5">
             <StatCard
               title="Devices"
               value={dashboardData?.summary.totalConnectedDevices}
             />
           </CarouselItem>
 
-          <CarouselItem className="basis-1/5">
+          <CarouselItem className="basis-1/2 sm:basis-1/5">
             <Card>
               <CardHeader>
                 <CardTitle className="text-sm text-brand">Storage</CardTitle>
@@ -186,26 +186,6 @@ export default function Dashboard() {
                 />
                 <p className="text-sm mt-2">
                   {dashboardData?.summary.energyStorageLevel_percent}%
-                </p>
-              </CardContent>
-            </Card>
-          </CarouselItem>
-
-          <CarouselItem className="basis-1/5">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm text-brand">
-                  Top Performing Station
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-lg font-bold">
-                  {dashboardData?.topPerformingStation.name}
-                </p>
-
-                <p className="text-sm text-muted-foreground">
-                  {dashboardData?.topPerformingStation.energyGenerated_kWh} kWh
-                  generated
                 </p>
               </CardContent>
             </Card>
@@ -304,7 +284,11 @@ export default function Dashboard() {
                 <Label className="text-muted-foreground">Insights:</Label>
                 <div className="flex gap-2 flex-wrap">
                   {aiData.data.insights?.map((rec, i) => (
-                    <Badge key={i} variant="secondary">
+                    <Badge
+                      key={i}
+                      variant="secondary"
+                      className="whitespace-pre-wrap h-full"
+                    >
                       {rec}
                     </Badge>
                   ))}
@@ -317,7 +301,11 @@ export default function Dashboard() {
                 </Label>
                 <div className="flex gap-2 flex-wrap">
                   {aiData.data.recommendations?.map((rec, i) => (
-                    <Badge key={i} variant="secondary">
+                    <Badge
+                      key={i}
+                      variant="secondary"
+                      className="whitespace-pre-wrap h-full"
+                    >
                       {rec}
                     </Badge>
                   ))}
@@ -329,7 +317,11 @@ export default function Dashboard() {
                   <Label className="text-muted-foreground">Anomalies:</Label>
                   <div className="flex gap-2 flex-wrap">
                     {aiData.data.anomalies.map((a: string, idx: number) => (
-                      <Badge key={idx} variant="destructive">
+                      <Badge
+                        key={idx}
+                        variant="destructive"
+                        className="whitespace-pre-wrap h-full"
+                      >
                         {a}
                       </Badge>
                     ))}
