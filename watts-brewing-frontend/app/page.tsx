@@ -30,6 +30,7 @@ import {
   EnergyTab,
   Station,
 } from "@/lib/types";
+import { DashboardSkeleton } from "@/components/custom/dashboard-skeleton";
 
 function StatCard({ title, value, suffix }: any) {
   return (
@@ -125,9 +126,9 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  if (!dashboardData) return <p>Loading Dashboard Data...</p>;
-  if (!stationRanking) return <p>Loading Station Ranking...</p>;
-  if (!aiData) return <p>Loading AI Insights...</p>;
+  if (!dashboardData || !stationRanking || !aiData) {
+    return <DashboardSkeleton />;
+  }
 
   const source = dashboardData?.sources[tab as keyof EnergySources];
   const { kinetic, vibration, airflow } = dashboardData?.sources;
