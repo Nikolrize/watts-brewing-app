@@ -4,17 +4,23 @@ import { loginCredential } from "./types";
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export async function getDashboard() {
-  const res = await fetch(`${BASE_URL}/api/dashboard`);
+  const res = await fetch(`${BASE_URL}/api/dashboard`, {
+    credentials: "include",
+  });
   return res.json();
 }
 
 export async function getStationRanking() {
-  const res = await fetch(`${BASE_URL}/api/stations`);
+  const res = await fetch(`${BASE_URL}/api/stations`, {
+    credentials: "include",
+  });
   return res.json();
 }
 
 export async function getAIInsights() {
-  const res = await fetch(`${BASE_URL}/api/ai`);
+  const res = await fetch(`${BASE_URL}/api/ai`, {
+    credentials: "include",
+  });
   return res.json();
 }
 
