@@ -1,31 +1,28 @@
-import { redirect } from "next/navigation";
 import { loginCredential } from "./types";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 export async function getDashboard() {
-  const res = await fetch(`${BASE_URL}/api/dashboard`, {
+  const res = await fetch(`/api/dashboard`, {
     credentials: "include",
   });
   return res.json();
 }
 
 export async function getStationRanking() {
-  const res = await fetch(`${BASE_URL}/api/stations`, {
+  const res = await fetch(`/api/stations`, {
     credentials: "include",
   });
   return res.json();
 }
 
 export async function getAIInsights() {
-  const res = await fetch(`${BASE_URL}/api/ai`, {
+  const res = await fetch(`/api/ai`, {
     credentials: "include",
   });
   return res.json();
 }
 
 export async function login(form: loginCredential) {
-  const res = await fetch(`${BASE_URL}/api/auth/login`, {
+  const res = await fetch(`/api/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,7 +35,7 @@ export async function login(form: loginCredential) {
 }
 
 export async function getUser() {
-  const res = await fetch(`${BASE_URL}/api/user/me`, {
+  const res = await fetch(`/api/user/me`, {
     method: "GET",
     credentials: "include",
   });
@@ -51,7 +48,7 @@ export async function getUser() {
 }
 
 export async function logoutUser() {
-  const res = await fetch(`${BASE_URL}/api/auth/logout`, {
+  const res = await fetch(`/api/auth/logout`, {
     method: "POST",
     credentials: "include",
   });
